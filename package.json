@@ -85,7 +85,6 @@
   "dependencies": {
     "@google-cloud/pubsub": "^2.7.0",
     "@types/archiver": "^5.1.0",
-    "@types/flat": "^5.0.2",
     "JSONStream": "^1.2.1",
     "abort-controller": "^3.0.0",
     "ajv": "^6.12.6",
@@ -107,7 +106,6 @@
     "exit-code": "^1.0.2",
     "express": "^4.16.4",
     "filesize": "^6.1.0",
-    "flatten": "^1.0.3",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "google-auth-library": "^6.1.3",
