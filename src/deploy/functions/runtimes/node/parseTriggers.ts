@@ -44,7 +44,7 @@ export interface TriggerAnnotation {
   minInstances?: number;
   serviceAccountEmail?: string;
   httpsTrigger?: {
-    allowInsecure?: boolean;
+    invoker?: string[];
   };
   eventTrigger?: {
     eventType: string;
@@ -57,7 +57,6 @@ export interface TriggerAnnotation {
   timeZone?: string;
   regions?: string[];
   concurrency?: number;
-  invoker?: string[];
 }
 
 /**
@@ -154,16 +153,11 @@ export function addResourcesToBackend(
     }
 
     if (annotation.httpsTrigger) {
-      let allowInsecure: boolean;
-      if ("allowInsecure" in annotation.httpsTrigger) {
-        allowInsecure = !!annotation.httpsTrigger.allowInsecure;
-      } else {
-        allowInsecure = !annotation.platform || annotation.platform === "gcfv1";
-      }
-      trigger = { allowInsecure };
+      trigger = {};
       if (annotation.failurePolicy) {
         logger.warn(`Ignoring retry policy for HTTPS function ${annotation.name}`);
       }
+      proto.copyIfPresent(trigger, annotation.httpsTrigger, "invoker", "invoker");
     } else {
       trigger = {
         eventType: annotation.eventTrigger!.eventType,
@@ -203,8 +197,7 @@ export function addResourcesToBackend(
       "timeout",
       "maxInstances",
       "minInstances",
-      "availableMemoryMb",
-      "invoker"
+      "availableMemoryMb"
     );
 
     if (annotation.schedule) {

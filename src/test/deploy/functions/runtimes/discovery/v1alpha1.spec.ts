@@ -12,9 +12,7 @@ const MIN_FUNC: Partial<backend.FunctionSpec> = {
   platform: "gcfv1",
   id: "id",
   entryPoint: "entryPoint",
-  trigger: {
-    allowInsecure: false,
-  },
+  trigger: {},
 };
 
 describe("backendFromV1Alpha1", () => {
@@ -89,7 +87,6 @@ describe("backendFromV1Alpha1", () => {
         vpcConnectorEgressSettings: {},
         labels: "yes",
         ingressSettings: true,
-        invoker: true,
       };
       for (const [key, value] of Object.entries(invalidFunctionEntries)) {
         it(`invalid value for CloudFunction key ${key}`, () => {
@@ -172,9 +169,7 @@ describe("backendFromV1Alpha1", () => {
         cloudFunctions: [
           {
             ...MIN_FUNC,
-            trigger: {
-              allowInsecure: false,
-            },
+            trigger: {},
           },
         ],
       };
@@ -184,9 +179,7 @@ describe("backendFromV1Alpha1", () => {
         cloudFunctions: [
           {
             ...DEFAULTED_FUNC,
-            trigger: {
-              allowInsecure: false,
-            },
+            trigger: {},
           },
         ],
       };
@@ -198,9 +191,7 @@ describe("backendFromV1Alpha1", () => {
         cloudFunctions: [
           {
             ...MIN_FUNC,
-            trigger: {
-              allowInsecure: false,
-            },
+            trigger: {},
           },
         ],
         topics: [
@@ -227,9 +218,7 @@ describe("backendFromV1Alpha1", () => {
         cloudFunctions: [
           {
             ...DEFAULTED_FUNC,
-            trigger: {
-              allowInsecure: false,
-            },
+            trigger: {},
           },
         ],
         topics: [

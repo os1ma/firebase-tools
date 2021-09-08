@@ -29,7 +29,7 @@ describe("addResourcesToBackend", () => {
   const BASIC_FUNCTION: Omit<backend.FunctionSpec, "trigger"> = Object.freeze({
     platform: "gcfv1",
     ...BASIC_FUNCTION_NAME,
-    runtime: "nodejs14",
+    runtime: "nodejs16",
     entryPoint: "func",
   });
 
@@ -37,7 +37,7 @@ describe("addResourcesToBackend", () => {
     expect(() => {
       parseTriggers.addResourcesToBackend(
         "project",
-        "nodejs14",
+        "nodejs16",
         {
           ...BASIC_TRIGGER,
           httpsTrigger: {},
@@ -59,16 +59,14 @@ describe("addResourcesToBackend", () => {
     };
 
     const result = backend.empty();
-    parseTriggers.addResourcesToBackend("project", "nodejs14", trigger, result);
+    parseTriggers.addResourcesToBackend("project", "nodejs16", trigger, result);
 
     const expected: backend.Backend = {
       ...backend.empty(),
       cloudFunctions: [
         {
           ...BASIC_FUNCTION,
-          trigger: {
-            allowInsecure: true,
-          },
+          trigger: {},
         },
       ],
     };
@@ -93,7 +91,7 @@ describe("addResourcesToBackend", () => {
         }
 
         const result = backend.empty();
-        parseTriggers.addResourcesToBackend("project", "nodejs14", trigger, result);
+        parseTriggers.addResourcesToBackend("project", "nodejs16", trigger, result);
 
         const expected: backend.Backend = {
           ...backend.empty(),
@@ -118,7 +116,9 @@ describe("addResourcesToBackend", () => {
   it("should copy fields", () => {
     const trigger: parseTriggers.TriggerAnnotation = {
       ...BASIC_TRIGGER,
-      httpsTrigger: {},
+      httpsTrigger: {
+        invoker: ["public"],
+      },
       maxInstances: 42,
       minInstances: 1,
       serviceAccountEmail: "inlined@google.com",
@@ -129,11 +129,10 @@ describe("addResourcesToBackend", () => {
       labels: {
         test: "testing",
       },
-      invoker: ["public"],
     };
 
     const result = backend.empty();
-    parseTriggers.addResourcesToBackend("project", "nodejs14", trigger, result);
+    parseTriggers.addResourcesToBackend("project", "nodejs16", trigger, result);
 
     const expected: backend.Backend = {
       ...backend.empty(),
@@ -141,7 +140,7 @@ describe("addResourcesToBackend", () => {
         {
           ...BASIC_FUNCTION,
           trigger: {
-            allowInsecure: true,
+            invoker: ["public"],
           },
           maxInstances: 42,
           minInstances: 1,
@@ -153,7 +152,6 @@ describe("addResourcesToBackend", () => {
           labels: {
             test: "testing",
           },
-          invoker: ["public"],
         },
       ],
     };
@@ -171,7 +169,7 @@ describe("addResourcesToBackend", () => {
     };
 
     const result = backend.empty();
-    parseTriggers.addResourcesToBackend("project", "nodejs14", trigger, result);
+    parseTriggers.addResourcesToBackend("project", "nodejs16", trigger, result);
 
     const expected: backend.Backend = {
       ...backend.empty(),
@@ -199,16 +197,14 @@ describe("addResourcesToBackend", () => {
     };
 
     const result = backend.empty();
-    parseTriggers.addResourcesToBackend("project", "nodejs14", trigger, result);
+    parseTriggers.addResourcesToBackend("project", "nodejs16", trigger, result);
 
     const expected: backend.Backend = {
       ...backend.empty(),
       cloudFunctions: [
         {
           ...BASIC_FUNCTION,
-          trigger: {
-            allowInsecure: true,
-          },
+          trigger: {},
           region: "europe-west1",
         },
       ],
@@ -224,23 +220,19 @@ describe("addResourcesToBackend", () => {
     };
 
     const result = backend.empty();
-    parseTriggers.addResourcesToBackend("project", "nodejs14", trigger, result);
+    parseTriggers.addResourcesToBackend("project", "nodejs16", trigger, result);
 
     const expected: backend.Backend = {
       ...backend.empty(),
       cloudFunctions: [
         {
           ...BASIC_FUNCTION,
-          trigger: {
-            allowInsecure: true,
-          },
+          trigger: {},
           region: "us-central1",
         },
         {
           ...BASIC_FUNCTION,
-          trigger: {
-            allowInsecure: true,
-          },
+          trigger: {},
           region: "europe-west1",
         },
       ],
@@ -274,7 +266,7 @@ describe("addResourcesToBackend", () => {
     };
 
     const result = backend.empty();
-    parseTriggers.addResourcesToBackend("project", "nodejs14", trigger, result);
+    parseTriggers.addResourcesToBackend("project", "nodejs16", trigger, result);
 
     const europeFunctionName = {
       ...BASIC_FUNCTION_NAME,
@@ -283,9 +275,7 @@ describe("addResourcesToBackend", () => {
 
     const usFunction = {
       ...BASIC_FUNCTION,
-      trigger: {
-        allowInsecure: true,
-      },
+      trigger: {},
       labels: {
         "deployment-scheduled": "true",
         test: "testing",
@@ -295,9 +285,7 @@ describe("addResourcesToBackend", () => {
     const europeFunction = {
       ...BASIC_FUNCTION,
       ...europeFunctionName,
-      trigger: {
-        allowInsecure: true,
-      },
+      trigger: {},
       labels: {
         "deployment-scheduled": "true",
         test: "testing",
